@@ -35,3 +35,5 @@ Route::get('/admin/category/{id}', 'CategoryController@show'); // detail / show 
 Route::get('/admin/category/{id}/edit', 'CategoryController@edit'); // form edit data
 Route::put('/admin/category/{id}', 'CategoryController@update'); // update data
 Route::delete('admin/category/{id}', 'CategoryController@destroy'); // delete data
+
+Route::resource('admin/products', 'ProductController'); // route product

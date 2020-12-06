@@ -39,8 +39,7 @@
                 <a href="{{ url('admin') }}" class="nav-link">
                     <i class="nav-icon fas fa-th"></i>
                     <p>
-                    Dashboard
-                    <span class="right badge badge-danger">New</span>
+                        Dashboard
                     </p>
                 </a>
             </li>
@@ -54,13 +53,13 @@
                 </a>
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ url('admin/category') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Category</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('products.index') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Product</p>
                     </a>

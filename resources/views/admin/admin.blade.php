@@ -64,5 +64,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
 
 @yield('script')
+
+@stack('scripts')
+
 </body>
 </html>

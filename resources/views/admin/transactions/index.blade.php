@@ -44,14 +44,10 @@
                                 @endforeach
                             </tbody>
                         </table>  --}}
-                        {{$dataTable->table()}}
+                        @include('admin.transactions.table')
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    {{$dataTable->scripts()}}
-@endpush

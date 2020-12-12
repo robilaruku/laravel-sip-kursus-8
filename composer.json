@@ -16,7 +16,8 @@
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.2",
         "maatwebsite/excel": "^3.1",
-        "yajra/laravel-datatables": "^1.5"
+        "yajra/laravel-datatables": "^1.5",
+        "yajra/laravel-datatables-buttons": "^4.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

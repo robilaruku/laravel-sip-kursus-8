@@ -8,7 +8,7 @@ class Transactions extends Model
 {
     protected $table = 'transactions';
 
-    protected $fillable = ['product_id', 'trx_date', 'price'];
+    protected $fillable = ['id', 'product_id', 'trx_date', 'price'];
 
     public function product()
     {

@@ -3,11 +3,8 @@
 namespace App\DataTables;
 
 use App\Models\Transactions;
-use Yajra\DataTables\Html\Button;
-use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\EloquentDataTable;
 
 class TransactionsDataTable extends DataTable
 {
@@ -19,28 +16,41 @@ class TransactionsDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        return datatables()
-            ->eloquent($query)
-            ->addColumn('action', 'admin.transactions.action')
-            // menambah column
-            ->addColumn('product', function($data) {
-                if(!empty($data->product_id)) {
-                    return $data->product['name'];
-                } else {
-                    return '';
-                }
-            })
-            ->filterColumn('product', function($query, $keyword) {
-                $query->whereHas('product', function ($query) use ($keyword) {
-                    $query->where('products.name', 'LIKE', "%{$keyword}%");
-                });
+        $dataTable = new EloquentDataTable($query);
+
+        return $dataTable->addColumn('name', function($trx){
+            if (!empty($trx->product_id)) {
+                return $trx->product->name;
+            }else{
+                return '';
+            }
+        })
+        ->filterColumn('name', function($query, $keyword) {
+            $query->whereHas('product', function ($query) use ($keyword) {
+                $query->where('products.name', 'LIKE', "%{$keyword}%");
             });
+        })
+        ->editColumn('trx_date', function($trx){
+            if (!empty($trx->trx_date)) {
+                return date('d-M-Y', strtotime($trx->trx_date));
+            }else{
+                return '';
+            }
+        })
+        ->editColumn('price', function($trx){
+            if (!empty($trx->price)) {
+                return "Rp " . number_format($trx->price,2,',','.');
+            }else{
+                return '';
+            }
+        })
+        ->rawColumns(['action']);
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Transaction $model
+     * @param \App\Models\Customer $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(Transactions $model)
@@ -56,18 +66,19 @@ class TransactionsDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('transactions-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->parameters([
+                'dom'       => 'Bfrtip',
+                'stateSave' => true,
+                'order'     => [[0, 'desc']],
+                'buttons'   => [
+                    ['extend' => 'export', 'className' => 'btn btn-default btn-sm no-corner',],
+                    ['extend' => 'print', 'className' => 'btn btn-default btn-sm no-corner',],
+                    ['extend' => 'reset', 'className' => 'btn btn-default btn-sm no-corner',],
+                    ['extend' => 'reload', 'className' => 'btn btn-default btn-sm no-corner',],
+                ],
+            ]);
     }
 
     /**
@@ -78,16 +89,9 @@ class TransactionsDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('id'),
-            Column::make('product'),
-            Column::make('price'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
-            // Column::computed('action')
-            //       ->exportable(false)
-            //       ->printable(false)
-            //       ->width(60)
-            //       ->addClass('text-center'),
+            'name' => ['searchable' => true, 'title' => 'Product Name'],
+            'trx_date' => ['searchable' => true, 'title' => 'Date'],
+            'price' => ['searchable' => true, 'title' => 'Price'],
         ];
     }
 
@@ -98,6 +102,6 @@ class TransactionsDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Transactions_' . date('YmdHis');
+        return 'transactions_datatables_' . time();
     }
 }

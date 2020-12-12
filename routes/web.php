@@ -28,7 +28,7 @@ Route::get('test_2', function() {
 Route::get('/admin', 'DashboardController@index');
 
 Route::get('/admin/category/create','CategoryController@create'); // menampilkan form
-Route::post('/admin/category', 'CategoryController@store'); // save data
+Route::post('/admin/category', 'CategoryController@store')->name('category.store'); // save data
 Route::get('/admin/category', 'CategoryController@index'); // show all data
 
 Route::get('/admin/category/{id}', 'CategoryController@show'); // detail / show data
@@ -37,3 +37,7 @@ Route::put('/admin/category/{id}', 'CategoryController@update'); // update data
 Route::delete('admin/category/{id}', 'CategoryController@destroy'); // delete data
 
 Route::resource('admin/products', 'ProductController'); // route product
+
+Route::get('admin/transactions/', 'TransactionsController@index');
+Route::get('admin/transactions/create', 'TransactionsController@create')->name('transactions.create');
+Route::post('admin/transactions/import', 'TransactionsController@import')->name('transactions.import');

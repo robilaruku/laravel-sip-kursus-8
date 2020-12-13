@@ -18,7 +18,9 @@ class TransactionsDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('name', function($trx){
+        return $dataTable->addIndexColumn()
+
+        ->addColumn('name', function($trx){
             if (!empty($trx->product_id)) {
                 return $trx->product->name;
             }else{
@@ -32,7 +34,7 @@ class TransactionsDataTable extends DataTable
         })
         ->editColumn('trx_date', function($trx){
             if (!empty($trx->trx_date)) {
-                return date('d-M-Y', strtotime($trx->trx_date));
+                return date('d-F-Y', strtotime($trx->trx_date));
             }else{
                 return '';
             }
@@ -43,8 +45,7 @@ class TransactionsDataTable extends DataTable
             }else{
                 return '';
             }
-        })
-        ->rawColumns(['action']);
+        });
     }
 
     /**
@@ -67,6 +68,18 @@ class TransactionsDataTable extends DataTable
     {
         return $this->builder()
             ->columns($this->getColumns())
+            ->addColumnBefore([
+                'defaultContent' => '',
+                'data'           => 'DT_RowIndex',
+                'name'           => 'DT_RowIndex',
+                'title'          => 'No',
+                'render'         => null,
+                'orderable'      => false,
+                'searchable'     => false,
+                'exportable'     => false,
+                'printable'      => true,
+                'footer'         => '',
+            ])
             ->minifiedAjax()
             ->parameters([
                 'dom'       => 'Bfrtip',

@@ -32,7 +32,7 @@
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $item->product->name }}</td>
-                                <td>{{ date('d-F-Y', strtotime($item->trx_date)) }}</td>
+                                <td>{{ \App\Helpers\Tanggal::keIndonesia($item->trx_date) }}</td>
                                 <td>{{ "Rp. ". number_format($item->price,2,',','.') }}</td>
                             </tr>
                             @endforeach
